@@ -57,3 +57,8 @@ GameStateStart::GameStateStart(Game *game) {
     view.setSize(size);
     view.setCenter(size * 0.5f);
 }
+
+
+void GameStateStart::loadGame() {
+    game->pushState(new GameStateEditor(game));
+}
