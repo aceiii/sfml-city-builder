@@ -31,7 +31,7 @@ void GameStateStart::handleInput() {
             {
                 view.setSize(event.size.width, event.size.height);
 
-                game->background.setPosition(game->window.mapPixelToCoords(sf::Vector2(0, 0)));
+                game->background.setPosition(game->window.mapPixelToCoords(sf::Vector2i(0, 0)));
                 game->background.setScale(float(event.size.width) / float(game->background.getTexture()->getSize().x),
                                           float(event.size.height) / float(game->background.getTexture()->getSize().y));
                 break;
