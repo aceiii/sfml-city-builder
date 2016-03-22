@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 set(SOURCE_FILES
-        src/main.cpp src/game_state.cpp src/game_state.h src/game.cpp src/game.h)
+        src/main.cpp src/game_state.h src/game.cpp src/game.h src/game_state_start.cpp src/game_state_start.h src/game_state_editor.cpp src/game_state_editor.h)
 
 add_executable(sfml_test ${SOURCE_FILES})
 
