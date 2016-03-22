@@ -6,7 +6,8 @@
 #define SFML_TEST_GAME_STATE_H
 
 
-class Game;
+#include "game.h"
+
 
 class GameState {
 
