@@ -1,0 +1,9 @@
+
+.DS_Store
+.localized
+
+Thumbs.db
+
+.idea/
+build/
+
