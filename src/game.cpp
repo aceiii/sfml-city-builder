@@ -12,32 +12,32 @@
 
 
 void Game::pushState(GameState* state) {
-    this->states.push(state);
+    states.push(state);
 }
 
 void Game::popState() {
-    delete this->states.top();
-    this->states.pop();
+    delete states.top();
+    states.pop();
 }
 
 void Game::changeState(GameState *state) {
-    if (!this->states.empty()) {
+    if (!states.empty()) {
         popState();
     }
     pushState(state);
 }
 
 GameState* Game::peekState() {
-    if (this->states.empty()) {
+    if (states.empty()) {
         return nullptr;
     }
-    return this->states.top();
+    return states.top();
 }
 
 void Game::gameLoop() {
     sf::Clock clock;
 
-    while (this->window.isOpen()) {
+    while (window.isOpen()) {
         sf::Time elapsed = clock.restart();
         float dt = elapsed.asSeconds();
 
@@ -48,21 +48,29 @@ void Game::gameLoop() {
         peekState()->handleInput();
         peekState()->update(dt);
 
-        this->window.clear(sf::Color::Black);
+        window.clear(sf::Color::Black);
 
         peekState()->draw(dt);
 
-        this->window.display();
+        window.display();
     }
 }
 
 Game::Game() {
-    this->window.create(sf::VideoMode(800, 600), "City Builder");
-    this->window.setFramerateLimit(60);
+    loadTextures();
+
+    window.create(sf::VideoMode(800, 600), "City Builder");
+    window.setFramerateLimit(60);
+
+    background.setTexture(texmgr.getRef("background"));
 }
 
 Game::~Game() {
-    while (!this->states.empty()) {
+    while (!states.empty()) {
         popState();
     }
+}
+
+void Game::loadTextures() {
+    texmgr.loadTexture("background", "data/media/background.png");
 }
