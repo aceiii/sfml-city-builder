@@ -115,3 +115,19 @@ void Game::loadTiles() {
              staticAnim, staticAnim },
              TileType::ROAD, 100, 0, 1);
 }
+
+void Game::loadStylesheets() {
+    stylesheets["button"] = GuiStyle(&fonts.at("main_font"), 1,
+                                     sf::Color(0xc6, 0xc6, 0xc6), sf::Color(0x94, 0x94, 0x94), sf::Color(0x00, 0x00, 0x00),
+                                     sf::Color(0x61, 0x61, 0x61), sf::Color(0x94, 0x94, 0x94), sf::Color(0x00, 0x00, 0x00));
+    stylesheets["text"] = GuiStyle(&fonts.at("main_font"), 0,
+                                     sf::Color(0x00, 0x00, 0x00, 0x00), sf::Color(0x00, 0x00, 0x00), sf::Color(0xff, 0xff, 0xff),
+                                     sf::Color(0x00, 0x00, 0x00, 0x00), sf::Color(0x00, 0x00, 0x00), sf::Color(0xff, 0x00, 0x00));
+}
+
+void Game::loadFonts() {
+    sf::Font font;
+    font.loadFromFile("data/media/font.tff");
+
+    fonts["main_font"] = font;
+}
