@@ -176,3 +176,62 @@ void Map::updateDirection(TileType tileType) {
         }
     }
 }
+
+void Map::findConnectedRegions(std::vector<TileType> whitelist, int regionType) {
+    int regions = 1;
+
+    for (auto& tile : tiles) {
+        tile.regions[regionType] = 0;
+    }
+
+    for (int y = 0; y < height; y += 1) {
+        for (int x = 0; x < width; x += 1) {
+            bool found = false;
+
+            for (auto type : whitelist) {
+                if (type == tiles[y * width + x].tileType) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (tiles[y * width + x].regions[regionType] == 0 && found) {
+                depthFirstSearch(whitelist, sf::Vector2i(x, y), regions++, regionType);
+            }
+        }
+    }
+
+    numRegions[regionType] = regions;
+}
+
+void Map::depthFirstSearch(std::vector<TileType>& whitelist, sf::Vector2i pos, int label, int regionType = 0) {
+    if (pos.x < 0 || pos.x >= width) {
+        return;
+    }
+    if (pos.y < 0 || pos.y >= height) {
+        return;
+    }
+    if (tiles[pos.y * width + pos.x].regions[regionType] != 0) {
+        return;
+    }
+
+    bool found = false;
+
+    for (auto type : whitelist) {
+        if (type == tiles[pos.y * width + pos.x].tileType) {
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        return;
+    }
+
+    tiles[pos.y * width + pos.x].regions[regionType] = label;
+
+    depthFirstSearch(whitelist, pos + sf::Vector2i(-1, 0), label, regionType);
+    depthFirstSearch(whitelist, pos + sf::Vector2i(0, 1), label, regionType);
+    depthFirstSearch(whitelist, pos + sf::Vector2i(1, 0), label, regionType);
+    depthFirstSearch(whitelist, pos + sf::Vector2i(0, -1), label, regionType);
+}
