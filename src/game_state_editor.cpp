@@ -50,8 +50,8 @@ void GameStateEditor::handleInput() {
                 } else if (actionState == ActionState::SELECTING) {
                     sf::Vector2f pos = game->window.mapPixelToCoords(sf::Mouse::getPosition(game->window), gameView);
 
-                    selectionEnd.x = pos.y / map.tileSize + pos.x / (2 * map.tileSize) - map.width * 0.5 - 0.5;
-                    selectionEnd.y = pos.y / map.tileSize - pos.x / (2 * map.tileSize) + map.width * 0.5 + 0.5;
+                    selectionEnd.x = int(pos.y / map.tileSize + pos.x / (2 * map.tileSize) - map.width * 0.5 - 0.5);
+                    selectionEnd.y = int(pos.y / map.tileSize - pos.x / (2 * map.tileSize) + map.width * 0.5 + 0.5);
 
                     map.clearSelected();
 
@@ -137,7 +137,7 @@ GameStateEditor::GameStateEditor(Game *game) {
 
     zoomLevel = 1.0f;
 
-    sf::Vector2f mapCenter(map.width, map.height * 0.5);
+    sf::Vector2f mapCenter(map.width, map.height * 0.5f);
     mapCenter *= float(map.tileSize);
 
     gameView.setCenter(mapCenter);
