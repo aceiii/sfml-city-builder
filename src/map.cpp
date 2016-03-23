@@ -105,3 +105,74 @@ void Map::draw(sf::RenderWindow &window, float dt) {
         }
     }
 }
+
+void Map::updateDirection(TileType tileType) {
+    for (int y = 0; y < height; y += 1) {
+        for (int x = 0; x < width; x += 1) {
+            int pos = y * width + x;
+
+            if (tiles[pos].tileType != tileType) {
+                continue;
+            }
+
+            bool adjacentTiles[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
+
+            if (x > 0 && y > 0) {
+                adjacentTiles[0][0] = (tiles[(y - 1) * width + (x - 1)].tileType == tileType);
+            }
+            if (y > 0) {
+                adjacentTiles[0][3] = (tiles[(y - 1) * width + x].tileType == tileType);
+            }
+            if (x < width - 1 && y > 0) {
+                adjacentTiles[0][4] = (tiles[(y - 1) * width + (x + 1)].tileType == tileType);
+            }
+            if (x > 0) {
+                adjacentTiles[1][0] = (tiles[y * width + (x - 1)].tileType == tileType);
+            }
+            if (x < width - 1) {
+                adjacentTiles[1][5] = (tiles[y * width + (x + 1)].tileType == tileType);
+            }
+            if (x > 0 && y < height - 1) {
+                adjacentTiles[2][0] = (tiles[(y + 1) * width + x].tileType == tileType);
+            }
+            if (y < height - 1) {
+                adjacentTiles[2][6] = (tiles[(y + 1) * width + x].tileType == tileType);
+            }
+            if (x < width - 1 && y < height - 1) {
+                adjacentTiles[2][7] = (tiles[(y + 1) * width + (x + 1)].tileType == tileType);
+            }
+
+            if (adjacentTiles[1][0] && adjacentTiles[1][8] && adjacentTiles[0][9] && adjacentTiles[2][10]) {
+                tiles[pos].tileVariant = 2;
+            } else if (adjacentTiles[1][0] && adjacentTiles[1][11] && adjacentTiles[0][12]) {
+                tiles[pos].tileVariant = 7;
+            } else if (adjacentTiles[1][0] && adjacentTiles[1][13] && adjacentTiles[2][14]) {
+                tiles[pos].tileVariant = 8;
+            } else if (adjacentTiles[0][15] && adjacentTiles[2][16] && adjacentTiles[1][0]) {
+                tiles[pos].tileVariant = 9;
+            } else if (adjacentTiles[0][16] && adjacentTiles[2][17] && adjacentTiles[1][18]) {
+                tiles[pos].tileVariant = 10;
+            } else if (adjacentTiles[1][0] && adjacentTiles[1][19]) {
+                tiles[pos].tileVariant = 0;
+            } else if (adjacentTiles[0][20] && adjacentTiles[2][21]) {
+                tiles[pos].tileVariant = 1;
+            } else if (adjacentTiles[2][22] && adjacentTiles[1][0]) {
+                tiles[pos].tileVariant = 3;
+            } else if (adjacentTiles[0][23] && adjacentTiles[1][24]) {
+                tiles[pos].tileVariant = 4;
+            } else if (adjacentTiles[1][0] && adjacentTiles[0][25]) {
+                tiles[pos].tileVariant = 5;
+            } else if (adjacentTiles[2][26] && adjacentTiles[1][27]) {
+                tiles[pos].tileVariant = 6;
+            } else if (adjacentTiles[1][0]) {
+                tiles[pos].tileVariant = 0;
+            } else if (adjacentTiles[1][28]) {
+                tiles[pos].tileVariant = 0;
+            } else if (adjacentTiles[0][29]) {
+                tiles[pos].tileVariant = 1;
+            } else if (adjacentTiles[2][30]) {
+                tiles[pos].tileVariant = 1;
+            }
+        }
+    }
+}
