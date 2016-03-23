@@ -41,6 +41,9 @@ void GameStateStart::handleInput() {
                 if (event.key.code == sf::Keyboard::Escape) {
                     game->window.close();
                 }
+                else if (event.key.code == sf::Keyboard::Space) {
+                    loadGame();
+                }
                 break;
             }
             default:
