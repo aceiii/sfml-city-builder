@@ -7,12 +7,26 @@
 
 
 #include "game_state.h"
+#include "map.h"
+
+
+enum class ActionState {
+    NONE,
+    PANNING,
+};
 
 
 class GameStateEditor : public GameState {
 private:
+    ActionState actionState;
+
     sf::View gameView;
     sf::View guiView;
+
+    Map map;
+
+    sf::Vector2i panningAnchor;
+    float zoomLevel;
 
 public:
     virtual void draw(const float dt);
