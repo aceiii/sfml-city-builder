@@ -8,13 +8,14 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 
 #include "map.h"
 
 
 Map::Map() {
     numSelected = 0;
-    tileSize = 0;
+    tileSize = 8;
     width = 0;
     height = 0;
     numRegions[0] = 1;
@@ -24,7 +25,7 @@ Map::Map(const std::string &filename, unsigned int width, unsigned int height,
          std::map<std::string, Tile> &tileAtlas)
 {
     numSelected = 0;
-    tileSize = 0;
+    tileSize = 8;
     load(filename, width, height, tileAtlas);
 }
 
@@ -43,6 +44,8 @@ void Map::load(const std::string &filename, unsigned int width, unsigned int hei
 
         TileType tileType;
         inputFile.read((char*)&tileType, sizeof(int));
+
+        std::cout << "tileType: " << tileTypeToStr(tileType) << std::endl;
 
         switch (tileType) {
             default:
