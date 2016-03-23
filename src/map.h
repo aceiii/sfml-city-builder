@@ -32,16 +32,18 @@ public:
     unsigned int numSelected;
     unsigned int numRegions[1];
 
+    std::vector<char> selected;
+
 public:
     void load(const std::string& filename, unsigned int width, unsigned int height, std::map<std::string, Tile>& tileAtlas);
     void save(const std::string& filename);
-
     void draw(sf::RenderWindow& window, float dt);
 
     void findConnectedRegions(std::vector<TileType> whitelist, int type);
-
     void updateDirection(TileType tileType);
 
+    void select(sf::Vector2i start, sf::Vector2i end, std::vector<TileType> blacklist);
+    void clearSelected();
 public:
     Map();
     Map(const std::string& filename, unsigned int width, unsigned int height, std::map<std::string, Tile>& tileAtlas);

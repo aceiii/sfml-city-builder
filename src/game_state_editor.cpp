@@ -47,6 +47,24 @@ void GameStateEditor::handleInput() {
                     sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(game->window) - panningAnchor);
                     gameView.move(-1.0f * pos * zoomLevel);
                     panningAnchor = sf::Mouse::getPosition(game->window);
+                } else if (actionState == ActionState::SELECTING) {
+                    sf::Vector2f pos = game->window.mapPixelToCoords(sf::Mouse::getPosition(game->window), gameView);
+
+                    selectionEnd.x = pos.y / map.tileSize + pos.x / (2 * map.tileSize) - map.width * 0.5 - 0.5;
+                    selectionEnd.y = pos.y / map.tileSize - pos.x / (2 * map.tileSize) + map.width * 0.5 + 0.5;
+
+                    map.clearSelected();
+
+                    if (currentTile->tileType == TileType::GRASS) {
+                        map.select(selectionStart, selectionEnd, { currentTile->tileType, TileType::WATER });
+                    } else {
+                        map.select(selectionStart, selectionEnd, {
+                            currentTile->tileType, TileType::FOREST,
+                            TileType::WATER, TileType::ROAD,
+                            TileType::RESIDENTIAL, TileType::COMMERCIAL,
+                            TileType::INDUSTRIAL
+                        });
+                    }
                 }
                 break;
             }
@@ -57,6 +75,20 @@ void GameStateEditor::handleInput() {
                         actionState = ActionState::PANNING;
                         panningAnchor = sf::Mouse::getPosition(game->window);
                     }
+                } else if (event.mouseButton.button == sf::Mouse::Left) {
+                    if (actionState != ActionState::SELECTING) {
+                        actionState = ActionState::SELECTING;
+
+                        sf::Vector2f pos = game->window.mapPixelToCoords(sf::Mouse::getPosition(game->window), gameView);
+
+                        selectionStart.x = int(pos.y / map.tileSize + pos.x / (2.0f * map.tileSize) - map.width * 0.5f - 0.5f);
+                        selectionStart.y = int(pos.y / map.tileSize - pos.x / (2.0f * map.tileSize) + map.width * 0.5f + 0.5f);
+                    }
+                } else if (event.mouseButton.button == sf::Mouse::Right) {
+                    if (actionState == ActionState::SELECTING) {
+                        actionState = ActionState::NONE;
+                        map.clearSelected();
+                    }
                 }
                 break;
             }
@@ -64,12 +96,16 @@ void GameStateEditor::handleInput() {
             {
                 if (event.mouseButton.button == sf::Mouse::Middle) {
                     actionState = ActionState::NONE;
+                } else if (event.mouseButton.button == sf::Mouse::Left) {
+                    if (actionState == ActionState::SELECTING) {
+                        actionState = ActionState::NONE;
+                        map.clearSelected();
+                    }
                 }
                 break;
             }
             case sf::Event::MouseWheelMoved:
             {
-                std::cout << "mousewheel delta:" << event.mouseWheel.delta << std::endl;
                 if (event.mouseWheel.delta < 0) {
                     gameView.zoom(2.0f);
                     zoomLevel *= 2.0f;
@@ -105,6 +141,11 @@ GameStateEditor::GameStateEditor(Game *game) {
     mapCenter *= float(map.tileSize);
 
     gameView.setCenter(mapCenter);
+
+    selectionStart = sf::Vector2i(0, 0);
+    selectionEnd = sf::Vector2i(0, 0);
+
+    currentTile = &game->tileAtlas.at("grass");
 
     actionState = ActionState::NONE;
 }

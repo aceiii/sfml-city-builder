@@ -13,6 +13,7 @@
 
 
 Map::Map() {
+    numSelected = 0;
     tileSize = 0;
     width = 0;
     height = 0;
@@ -22,6 +23,7 @@ Map::Map() {
 Map::Map(const std::string &filename, unsigned int width, unsigned int height,
          std::map<std::string, Tile> &tileAtlas)
 {
+    numSelected = 0;
     tileSize = 0;
     load(filename, width, height, tileAtlas);
 }
@@ -37,6 +39,7 @@ void Map::load(const std::string &filename, unsigned int width, unsigned int hei
 
     for (int pos = 0; pos < width * height; pos += 1) {
         resources.push_back(255);
+        selected.push_back(0);
 
         TileType tileType;
         inputFile.read((char*)&tileType, sizeof(int));
@@ -101,6 +104,13 @@ void Map::draw(sf::RenderWindow &window, float dt) {
             pos.y = (x + y) * tileSize * 0.5f;
 
             tiles[y * width + x].sprite.setPosition(pos);
+
+            if (selected[y * width + x]) {
+                tiles[y * width + x].sprite.setColor(sf::Color(0x7d, 0x7d, 0x7d));
+            } else {
+                tiles[y * width + x].sprite.setColor(sf::Color(0xff, 0xff, 0xff));
+            }
+
             tiles[y * width + x].draw(window, dt);
         }
     }
@@ -234,4 +244,59 @@ void Map::depthFirstSearch(std::vector<TileType>& whitelist, sf::Vector2i pos, i
     depthFirstSearch(whitelist, pos + sf::Vector2i(0, 1), label, regionType);
     depthFirstSearch(whitelist, pos + sf::Vector2i(1, 0), label, regionType);
     depthFirstSearch(whitelist, pos + sf::Vector2i(0, -1), label, regionType);
+}
+
+void Map::select(sf::Vector2i start, sf::Vector2i end, std::vector<TileType> blacklist) {
+    if (end.y < start.y) {
+        std::swap(start.y, end.y);
+        std::swap(start.x, end.x);
+    }
+
+    if (end.x >= width) {
+        end.x = width - 1;
+    } else if (end.x < 0) {
+        end.x = 0;
+    }
+
+    if (end.y >= height) {
+        end.y = height - 1;
+    } else if (end.y < 0) {
+        end.y = 0;
+    }
+
+    if (start.x >= width) {
+        start.x = width - 1;
+    } else if (start.x < 0) {
+        start.x = 0;
+    }
+
+    if (start.y >= height) {
+        start.y = height - 1;
+    } else if (start.y < 0) {
+        start.y = 0;
+    }
+
+    for (int y = start.y; y <= end.y; y += 1) {
+        for (int x = start.x; x <= end.x; x += 1) {
+            selected[y * width + x] = 1;
+
+            numSelected += 1;
+
+            for (auto type : blacklist) {
+                if (tiles[y * width + x].tileType == type) {
+                    selected[y * width + x] = 2;
+                    numSelected -= 1;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void Map::clearSelected() {
+    for (auto& tile : selected) {
+        tile = 0;
+    }
+
+    numSelected = 0;
 }

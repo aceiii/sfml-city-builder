@@ -13,6 +13,7 @@
 enum class ActionState {
     NONE,
     PANNING,
+    SELECTING,
 };
 
 
@@ -27,6 +28,11 @@ private:
 
     sf::Vector2i panningAnchor;
     float zoomLevel;
+
+    sf::Vector2i selectionStart;
+    sf::Vector2i selectionEnd;
+
+    Tile* currentTile;
 
 public:
     virtual void draw(const float dt);
