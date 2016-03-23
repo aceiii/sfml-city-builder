@@ -2,6 +2,9 @@
 // Created by Borin Ouch on 2016-03-22.
 //
 
+
+#include <iostream>
+
 #include "game_state_editor.h"
 
 
@@ -36,6 +39,44 @@ void GameStateEditor::handleInput() {
                 game->background.setPosition(game->window.mapPixelToCoords(sf::Vector2i(0, 0), guiView));
                 game->background.setScale(float(event.size.width) / float(game->background.getTexture()->getSize().x),
                                           float(event.size.height) / float(game->background.getTexture()->getSize().y));
+                break;
+            }
+            case sf::Event::MouseMoved:
+            {
+                if (actionState == ActionState::PANNING) {
+                    sf::Vector2f pos = sf::Vector2f(sf::Mouse::getPosition(game->window) - panningAnchor);
+                    gameView.move(-1.0f * pos * zoomLevel);
+                    panningAnchor = sf::Mouse::getPosition(game->window);
+                }
+                break;
+            }
+            case sf::Event::MouseButtonPressed:
+            {
+                if (event.mouseButton.button == sf::Mouse::Middle) {
+                    if (actionState != ActionState::PANNING) {
+                        actionState = ActionState::PANNING;
+                        panningAnchor = sf::Mouse::getPosition(game->window);
+                    }
+                }
+                break;
+            }
+            case sf::Event::MouseButtonReleased:
+            {
+                if (event.mouseButton.button == sf::Mouse::Middle) {
+                    actionState = ActionState::NONE;
+                }
+                break;
+            }
+            case sf::Event::MouseWheelMoved:
+            {
+                std::cout << "mousewheel delta:" << event.mouseWheel.delta << std::endl;
+                if (event.mouseWheel.delta < 0) {
+                    gameView.zoom(2.0f);
+                    zoomLevel *= 2.0f;
+                } else if (event.mouseWheel.delta > 0) {
+                    gameView.zoom(0.5f);
+                    zoomLevel *= 0.5f;
+                };
                 break;
             }
             default:
