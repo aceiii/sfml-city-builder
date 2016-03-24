@@ -3,6 +3,9 @@
 //
 
 
+#include <iostream>
+#include <utility>
+
 #include "game_state_start.h"
 #include "game_state_editor.h"
 
@@ -59,8 +62,16 @@ GameStateStart::GameStateStart(Game *game) {
 
     view.setSize(size);
     view.setCenter(size * 0.5f);
-}
 
+    guiSystem.emplace(std::string("menu"),
+                      Gui(sf::Vector2f(192, 32), 4, false,
+                          game->stylesheets.at("button"),
+                          { std::make_pair("Load Game", "load_game") }));
+
+    guiSystem.at("menu").setPosition(size);
+    guiSystem.at("menu").setOrigin(96, 32 * 1/2);
+    guiSystem.at("menu").show();
+}
 
 void GameStateStart::loadGame() {
     game->pushState(new GameStateEditor(game));

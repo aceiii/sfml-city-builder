@@ -45,8 +45,6 @@ void Map::load(const std::string &filename, unsigned int width, unsigned int hei
         TileType tileType;
         inputFile.read((char*)&tileType, sizeof(int));
 
-        std::cout << "tileType: " << tileTypeToStr(tileType) << std::endl;
-
         switch (tileType) {
             default:
             case TileType::VOID_TILE:

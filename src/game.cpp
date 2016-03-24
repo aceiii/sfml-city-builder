@@ -60,6 +60,8 @@ void Game::gameLoop() {
 Game::Game() {
     loadTextures();
     loadTiles();
+    loadFonts();
+    loadStylesheets();
 
     window.create(sf::VideoMode(800, 600), "City Builder");
     window.setFramerateLimit(60);
@@ -127,7 +129,7 @@ void Game::loadStylesheets() {
 
 void Game::loadFonts() {
     sf::Font font;
-    font.loadFromFile("data/media/font.tff");
+    font.loadFromFile("data/fonts/font.ttf");
 
     fonts["main_font"] = font;
 }

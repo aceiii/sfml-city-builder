@@ -8,14 +8,20 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <map>
+#include <string>
+
 #include "game_state.h"
+#include "gui.h"
 
 
 class GameStateStart : public GameState {
 
 private:
     sf::View view;
+    std::map<std::string, Gui> guiSystem;
 
+private:
     void loadGame();
 
 public:
