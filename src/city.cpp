@@ -4,6 +4,9 @@
 
 
 #include <numeric>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 #include "city.h"
 
@@ -32,11 +35,81 @@ City::City(std::string cityName, unsigned int tileSize, std::map<std::string, Ti
 }
 
 void City::load(std::string cityName, std::map<std::string, Tile> &tileAtlas) {
+    int width = 0;
+    int height = 0;
 
+    std::ifstream inputFile("data/config/" + cityName + "_cfg.dat", std::ios::in);
+
+    std::string line;
+    while (std::getline(inputFile, line)) {
+        std::istringstream lineStream(line);
+        std::string key;
+        if (std::getline(lineStream, key, '=')) {
+            std::string value;
+            if (std::getline(lineStream, value)) {
+                if (key == "width") {
+                    width = std::stoi(value);
+                } else if (key == "height") {
+                    height = std::stoi(value);
+                } else if (key == "day") {
+                    day = std::stoi(value);
+                } else if (key == "populationPool") {
+                    populationPool = std::stod(value);
+                } else if (key == "employmentPool") {
+                    employmentPool = std::stod(value);
+                } else if (key == "population") {
+                    population = std::stod(value);
+                } else if (key == "employable") {
+                    employable = std::stod(value);
+                } else if (key == "birthRate") {
+                    birthRate = std::stod(value);
+                } else if (key == "deathRate") {
+                    deathRate = std::stod(value);
+                } else if (key == "residentialTax") {
+                    residentialTax = std::stod(value);
+                } else if (key == "commercialTax") {
+                    commercialTax = std::stod(value);
+                } else if (key == "industrialTax") {
+                    industrialTax = std::stod(value);
+                } else if (key == "funds") {
+                    funds = std::stod(value);
+                } else if (key == "earnings") {
+                    earnings = std::stod(value);
+                }
+            } else {
+                std::cerr << "Error, no value for key " << key << std::endl;
+            }
+        }
+    }
+
+    inputFile.close();
+
+    map.load("data/maps/" + cityName + "_map.dat", width, height, tileAtlas);
+
+    tileChanged();
 }
 
 void City::save(std::string cityName) {
+    std::ofstream outputFile("data/config/" + cityName + "_cfg.dat", std::ios::out);
 
+    outputFile << "width=" << map.width << std::endl;
+    outputFile << "height=" << map.height << std::endl;
+    outputFile << "day=" << day << std::endl;
+    outputFile << "populationPool=" << populationPool << std::endl;
+    outputFile << "employmentPool=" << employmentPool << std::endl;
+    outputFile << "population=" << population << std::endl;
+    outputFile << "employable=" << employable << std::endl;
+    outputFile << "birthRate=" << birthRate << std::endl;
+    outputFile << "deathRate=" << deathRate << std::endl;
+    outputFile << "residentialTax=" << residentialTax << std::endl;
+    outputFile << "commercialTax=" << commercialTax << std::endl;
+    outputFile << "industrialTax=" << industrialTax << std::endl;
+    outputFile << "funds=" << funds << std::endl;
+    outputFile << "earnings=" << earnings << std::endl;
+
+    outputFile.close();
+
+    map.save("data/maps/" + cityName + "_map.dat");
 }
 
 void City::update(float dt) {
