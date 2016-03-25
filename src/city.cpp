@@ -134,11 +134,11 @@ void City::update(float dt) {
         Tile& tile = map.tiles[shuffledTiles[i]];
 
         if (tile.tileType == TileType::RESIDENTIAL) {
-            distributionPool(populationPool, tile, birthRate - deathRate);
+            distributePool(populationPool, tile, birthRate - deathRate);
             popTotal += tile.population;
         } else if (tile.tileType == TileType::COMMERCIAL) {
             if (rand() % 100 < 15 * (1.0 - commercialTax)) {
-                distributionPool(employmentPool, tile, 0.0);
+                distributePool(employmentPool, tile, 0.0);
             }
         } else if (tile.tileType == TileType::INDUSTRIAL) {
             if (map.resources[i] > 0 && rand() % 100 < population) {
@@ -147,7 +147,7 @@ void City::update(float dt) {
             }
 
             if (rand() % 100 < 15 * (1.0 - industrialTax)) {
-                distributionPool(employmentPool, tile, 0.0);
+                distributePool(employmentPool, tile, 0.0);
             }
         }
 
@@ -268,7 +268,7 @@ double City::getUnemployed() {
     return employmentPool;
 }
 
-double City::distributionPool(double &pool, Tile &tile, double rate) {
+double City::distributePool(double &pool, Tile &tile, double rate) {
     const static int moveRate = 4;
 
     double maxPop = tile.maxPopPerLevel * (tile.tileVariant + 1);

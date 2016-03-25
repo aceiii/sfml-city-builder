@@ -28,7 +28,7 @@ private:
     double deathRate;
 
 private:
-    double distributionPool(double& pool, Tile& tile, double rate);
+    double distributePool(double &pool, Tile &tile, double rate);
 
 public:
     Map map;
