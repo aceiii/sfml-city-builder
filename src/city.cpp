@@ -113,7 +113,122 @@ void City::save(std::string cityName) {
 }
 
 void City::update(float dt) {
+    double popTotal = 0;
+    double commercialRevenue = 0;
+    double industrialRevenue = 0;
 
+    currentTime += dt;
+    if (currentTime < timePerDay) {
+        return;
+    }
+
+    day += 1;
+    currentTime = 0;
+
+    if (day % 30 == 0) {
+        funds += earnings;
+        earnings = 0;
+    }
+
+    for (int i = 0; i < map.tiles.size(); i += 1) {
+        Tile& tile = map.tiles[shuffledTiles[i]];
+
+        if (tile.tileType == TileType::RESIDENTIAL) {
+            distributionPool(populationPool, tile, birthRate - deathRate);
+            popTotal += tile.population;
+        } else if (tile.tileType == TileType::COMMERCIAL) {
+            if (rand() % 100 < 15 * (1.0 - commercialTax)) {
+                distributionPool(employmentPool, tile, 0.0);
+            }
+        } else if (tile.tileType == TileType::INDUSTRIAL) {
+            if (map.resources[i] > 0 && rand() % 100 < population) {
+                tile.population += 1;
+                map.resources[i] -= 1;
+            }
+
+            if (rand() % 100 < 15 * (1.0 - industrialTax)) {
+                distributionPool(employmentPool, tile, 0.0);
+            }
+        }
+
+        tile.update();
+    }
+
+    for (int i = 0; i < map.tiles.size(); i += 1) {
+        Tile& tile = map.tiles[shuffledTiles[i]];
+
+        if (tile.tileType == TileType::INDUSTRIAL) {
+            int receivedResources = 0;
+
+            for (auto& tile2 : map.tiles) {
+                if (tile2.regions[0] == tile.regions[0] && tile2.tileType == TileType::INDUSTRIAL) {
+                    if (tile2.production > 0) {
+                        receivedResources += 1;
+                        tile2.production -= 1;
+                    }
+                    if (receivedResources >= tile.tileVariant + 1) {
+                        break;
+                    }
+                }
+            }
+
+            tile.storedGoods += (receivedResources + tile.production) * (tile.tileVariant + 1);
+        }
+    }
+
+    for (int i = 0; i < map.tiles.size(); i += 1) {
+        Tile& tile = map.tiles[shuffledTiles[i]];
+
+        if (tile.tileType == TileType::COMMERCIAL) {
+            int receivedGoods = 0;
+            double maxCustomers = 0.0;
+
+            for (auto& tile2 : map.tiles) {
+                if (tile2.regions[0] == tile.regions[0] && tile2.tileType == TileType::INDUSTRIAL && tile2.storedGoods > 0) {
+                    while (tile2.storedGoods > 0 && receivedGoods != tile.tileVariant + 1) {
+                        tile2.storedGoods -= 1;
+                        receivedGoods += 1;
+                        industrialRevenue += 100 * (1.0 - industrialTax);
+                    }
+                } else if (tile2.regions[0] == tile.regions[0] && tile2.tileType == TileType::RESIDENTIAL) {
+                    maxCustomers += tile2.population;
+                }
+
+                if (receivedGoods == tile.tileVariant + 1) {
+                    break;
+                }
+            }
+
+            tile.production = float((receivedGoods * 100.0 + rand() % 20) * (1.0 - commercialTax));
+
+            double revenue = tile.production * maxCustomers * tile.population / 100.0;
+
+            commercialRevenue += revenue;
+        }
+    }
+
+    populationPool = adjustPopulation(populationPool, birthRate - deathRate);
+    popTotal += populationPool;
+
+    float newWorkers = (popTotal - population) * propCanWork;
+    newWorkers *= (newWorkers < 0 ? -1 : 1);
+
+    employmentPool += newWorkers;
+    employable += newWorkers;
+
+    if (employmentPool < 0) {
+        employmentPool = 0;
+    }
+
+    if (employable < 0) {
+        employable = 0;
+    }
+
+    population = popTotal;
+
+    earnings = (population - populationPool) * 15 * residentialTax;
+    earnings += commercialRevenue * commercialTax;
+    earnings += industrialRevenue * industrialTax;
 }
 
 void City::bulldoze(const Tile &tile) {
