@@ -207,7 +207,7 @@ void City::update(float dt) {
         }
     }
 
-    populationPool = adjustPopulation(populationPool, birthRate - deathRate);
+    populationPool += populationPool * (birthRate - deathRate);
     popTotal += populationPool;
 
     float newWorkers = (popTotal - population) * propCanWork;
