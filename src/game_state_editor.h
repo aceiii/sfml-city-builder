@@ -8,6 +8,7 @@
 
 #include "game_state.h"
 #include "map.h"
+#include "city.h"
 
 
 enum class ActionState {
@@ -24,7 +25,9 @@ private:
     sf::View gameView;
     sf::View guiView;
 
-    Map map;
+    City city;
+
+    std::map<std::string, Gui> guiSystem;
 
     sf::Vector2i panningAnchor;
     float zoomLevel;
