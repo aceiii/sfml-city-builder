@@ -21,6 +21,7 @@ class GameState;
 class Game {
 
 private:
+    void initResourceManager();
     void loadTextures();
     void loadTiles();
     void loadStylesheets();

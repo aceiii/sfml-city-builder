@@ -10,6 +10,7 @@
 #include "game.h"
 #include "game_state.h"
 #include "animation_handler.h"
+#include "resource_manager.h"
 
 
 void Game::pushState(GameState* state) {
@@ -58,6 +59,8 @@ void Game::gameLoop() {
 }
 
 Game::Game() {
+    initResourceManager();
+
     loadTextures();
     loadTiles();
     loadFonts();
@@ -76,6 +79,9 @@ Game::~Game() {
 }
 
 void Game::loadTextures() {
+    ResourceManager* resourceManager = ResourceManager::getInstance();
+
+    /*
     texmgr.loadTexture("grass", "data/media/grass.png");
     texmgr.loadTexture("forest", "data/media/forest.png");
     texmgr.loadTexture("water", "data/media/water.png");
@@ -85,6 +91,16 @@ void Game::loadTextures() {
     texmgr.loadTexture("road", "data/media/road.png");
 
     texmgr.loadTexture("background", "data/media/background.png");
+    */
+
+    texmgr.loadTexture("grass", resourceManager->getResourcePath("grass.png"));
+    texmgr.loadTexture("forest", resourceManager->getResourcePath("forest.png"));
+    texmgr.loadTexture("water", resourceManager->getResourcePath("water.png"));
+    texmgr.loadTexture("residential", resourceManager->getResourcePath("residential.png"));
+    texmgr.loadTexture("commercial", resourceManager->getResourcePath("commercial.png"));
+    texmgr.loadTexture("industrial", resourceManager->getResourcePath("industrial.png"));
+    texmgr.loadTexture("road", resourceManager->getResourcePath("road.png"));
+    texmgr.loadTexture("background", resourceManager->getResourcePath("background.png"));
 }
 
 void Game::loadTiles() {
@@ -129,7 +145,21 @@ void Game::loadStylesheets() {
 
 void Game::loadFonts() {
     sf::Font font;
-    font.loadFromFile("data/fonts/font.ttf");
+    //font.loadFromFile("data/fonts/font.ttf");
+    font.loadFromFile(ResourceManager::getInstance()->getResourcePath("font.ttf"));
 
     fonts["main_font"] = font;
+}
+
+void Game::initResourceManager() {
+    ResourceManager* resourceManager = ResourceManager::getInstance();
+
+    resourceManager->setBasePath("data");
+
+    resourceManager->addResourceMapping("dat", "maps");
+    resourceManager->addResourceMapping("ttf", "fonts");
+    resourceManager->addResourceMapping("png", "media");
+    resourceManager->addResourceMapping("jpg", "media");
+    resourceManager->addResourceMapping("jpeg", "media");
+    resourceManager->addResourceMapping("gif", "media");
 }

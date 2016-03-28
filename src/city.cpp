@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "city.h"
+#include "resource_manager.h"
 
 
 City::City() {
@@ -38,7 +39,7 @@ void City::load(std::string cityName, std::map<std::string, Tile> &tileAtlas) {
     int width = 0;
     int height = 0;
 
-    std::ifstream inputFile("data/config/" + cityName + "_cfg.dat", std::ios::in);
+    std::ifstream inputFile(ResourceManager::getInstance()->getResourcePath(cityName + "_cfg.dat"), std::ios::in);
 
     std::string line;
     while (std::getline(inputFile, line)) {
@@ -84,13 +85,13 @@ void City::load(std::string cityName, std::map<std::string, Tile> &tileAtlas) {
 
     inputFile.close();
 
-    map.load("data/maps/" + cityName + "_map.dat", width, height, tileAtlas);
+    map.load(ResourceManager::getInstance()->getResourcePath(cityName + "_map.dat"), width, height, tileAtlas);
 
     tileChanged();
 }
 
 void City::save(std::string cityName) {
-    std::ofstream outputFile("data/config/" + cityName + "_cfg.dat", std::ios::out);
+    std::ofstream outputFile(ResourceManager::getInstance()->getResourcePath(cityName + "_cfg.dat"), std::ios::out);
 
     outputFile << "width=" << map.width << std::endl;
     outputFile << "height=" << map.height << std::endl;
@@ -109,7 +110,7 @@ void City::save(std::string cityName) {
 
     outputFile.close();
 
-    map.save("data/maps/" + cityName + "_map.dat");
+    map.save(ResourceManager::getInstance()->getResourcePath(cityName + "_map.dat"));
 }
 
 void City::update(float dt) {
