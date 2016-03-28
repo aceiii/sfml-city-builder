@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 set(SOURCE_FILES
-        src/main.cpp src/game_state.h src/game.cpp src/game.h src/game_state_start.cpp src/game_state_start.h src/game_state_editor.cpp src/game_state_editor.h src/texture_manager.cpp src/texture_manager.h src/animation_handler.cpp src/animation_handler.h src/tile.cpp src/tile.h src/map.cpp src/map.h src/gui.cpp src/gui.h src/city.cpp src/city.h)
+        src/main.cpp src/game_state.h src/game.cpp src/game.h src/game_state_start.cpp src/game_state_start.h src/game_state_editor.cpp src/game_state_editor.h src/texture_manager.cpp src/texture_manager.h src/animation_handler.cpp src/animation_handler.h src/tile.cpp src/tile.h src/map.cpp src/map.h src/gui.cpp src/gui.h src/city.cpp src/city.h src/resource_manager.cpp src/resource_manager.h)
 
 add_executable(sfml_test ${SOURCE_FILES})
 
