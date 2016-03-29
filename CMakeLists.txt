@@ -34,7 +34,7 @@ if (APPLE)
             MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_BUNDLE_VERSION}"
             MACOSX_BUNDLE_COPYRIGHT "Copyright © 2016. All rights reserved. Blah")
 
-    FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation)
+    find_library(COREFOUNDATION_LIBRARY CoreFoundation)
     target_link_libraries(sfml_test ${COREFOUNDATION_LIBRARY})
 
     add_custom_command(TARGET sfml_test COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app/Contents/Resources/data)
