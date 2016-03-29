@@ -20,11 +20,15 @@ set(SFML_LIBS
 target_link_libraries(sfml_test ${SFML_LIBS})
 
 if (APPLE)
-    set(MACOSX_BUNDLE_INFO_PLIST mac/Info.plist)
+    set(MACOSX_DEPLOYMENT_TARGET 10.7)
+    set(CMAKE_BUNDLE_VERSION  "${sfml_test_VERSION_MAJOR}.${sfml_test_VERSION_MINOR}.${sfml_test_VERSION_PATCH}")
+    set(CMAKE_BUNDLE_NAME "CMake ${CMAKE_BUNDLE_VERSION}")
 
     set_target_properties(sfml_test PROPERTIES
-            EXECUTABLE_NAME ${CMAKE_PROJECT_NAME}
-            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/mac/Info.plist")
+            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/mac/Info.plist"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${CMAKE_BUNDLE_VERSION}"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_BUNDLE_VERSION}"
+            MACOSX_BUNDLE_COPYRIGHT "Copyright © 2016. All rights reserved. Blah")
 
     FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation)
     target_link_libraries(sfml_test ${COREFOUNDATION_LIBRARY})
