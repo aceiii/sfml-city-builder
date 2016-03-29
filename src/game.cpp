@@ -5,11 +5,9 @@
 #include <stack>
 
 #include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
 
 #include "game.h"
 #include "game_state.h"
-#include "animation_handler.h"
 #include "resource_manager.h"
 
 
@@ -81,18 +79,6 @@ Game::~Game() {
 void Game::loadTextures() {
     ResourceManager* resourceManager = ResourceManager::getInstance();
 
-    /*
-    texmgr.loadTexture("grass", "data/media/grass.png");
-    texmgr.loadTexture("forest", "data/media/forest.png");
-    texmgr.loadTexture("water", "data/media/water.png");
-    texmgr.loadTexture("residential", "data/media/residential.png");
-    texmgr.loadTexture("commercial", "data/media/commercial.png");
-    texmgr.loadTexture("industrial", "data/media/industrial.png");
-    texmgr.loadTexture("road", "data/media/road.png");
-
-    texmgr.loadTexture("background", "data/media/background.png");
-    */
-
     texmgr.loadTexture("grass", resourceManager->getResourcePath("grass.png"));
     texmgr.loadTexture("forest", resourceManager->getResourcePath("forest.png"));
     texmgr.loadTexture("water", resourceManager->getResourcePath("water.png"));
@@ -145,7 +131,6 @@ void Game::loadStylesheets() {
 
 void Game::loadFonts() {
     sf::Font font;
-    //font.loadFromFile("data/fonts/font.ttf");
     font.loadFromFile(ResourceManager::getInstance()->getResourcePath("font.ttf"));
 
     fonts["main_font"] = font;
