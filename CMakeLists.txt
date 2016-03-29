@@ -20,6 +20,12 @@ set(SFML_LIBS
 target_link_libraries(sfml_test ${SFML_LIBS})
 
 if (APPLE)
+    set(MACOSX_BUNDLE_INFO_PLIST mac/Info.plist)
+
+    set_target_properties(sfml_test PROPERTIES
+            EXECUTABLE_NAME ${CMAKE_PROJECT_NAME}
+            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/mac/Info.plist")
+
     FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation)
     target_link_libraries(sfml_test ${COREFOUNDATION_LIBRARY})
 
