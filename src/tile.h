@@ -25,6 +25,7 @@ enum class TileType {
 
 
 std::string tileTypeToStr(TileType type);
+std::string tileTypeShortName(TileType type);
 
 
 class Tile {

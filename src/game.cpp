@@ -79,40 +79,44 @@ Game::~Game() {
 void Game::loadTextures() {
     ResourceManager* resourceManager = ResourceManager::getInstance();
 
-    texmgr.loadTexture("grass", resourceManager->getResourcePath("grass.png"));
-    texmgr.loadTexture("forest", resourceManager->getResourcePath("forest.png"));
-    texmgr.loadTexture("water", resourceManager->getResourcePath("water.png"));
-    texmgr.loadTexture("residential", resourceManager->getResourcePath("residential.png"));
-    texmgr.loadTexture("commercial", resourceManager->getResourcePath("commercial.png"));
-    texmgr.loadTexture("industrial", resourceManager->getResourcePath("industrial.png"));
-    texmgr.loadTexture("road", resourceManager->getResourcePath("road.png"));
+    texmgr.loadTexture(tileTypeShortName(TileType::GRASS), resourceManager->getResourcePath("grass.png"));
+    texmgr.loadTexture(tileTypeShortName(TileType::FOREST), resourceManager->getResourcePath("forest.png"));
+    texmgr.loadTexture(tileTypeShortName(TileType::WATER), resourceManager->getResourcePath("water.png"));
+    texmgr.loadTexture(tileTypeShortName(TileType::RESIDENTIAL), resourceManager->getResourcePath("residential.png"));
+    texmgr.loadTexture(tileTypeShortName(TileType::COMMERCIAL), resourceManager->getResourcePath("commercial.png"));
+    texmgr.loadTexture(tileTypeShortName(TileType::INDUSTRIAL), resourceManager->getResourcePath("industrial.png"));
+    texmgr.loadTexture(tileTypeShortName(TileType::ROAD), resourceManager->getResourcePath("road.png"));
     texmgr.loadTexture("background", resourceManager->getResourcePath("background.png"));
 }
 
 void Game::loadTiles() {
     Animation staticAnim(0, 0, 1.0f);
 
-    tileAtlas["grass"] = Tile(tileSize, 1, texmgr.getRef("grass"), { staticAnim }, TileType::GRASS, 50, 0, 1);
-    tileAtlas["forest"] = Tile(tileSize, 1, texmgr.getRef("forest"), { staticAnim }, TileType::FOREST, 100, 0, 1);
-    tileAtlas["water"] =
-        Tile(tileSize, 1, texmgr.getRef("water"),
+    tileAtlas[tileTypeShortName(TileType::GRASS)] =
+        Tile(tileSize, 1, texmgr.getRef(tileTypeShortName(TileType::GRASS)),
+             { staticAnim }, TileType::GRASS, 50, 0, 1);
+    tileAtlas[tileTypeShortName(TileType::FOREST)] =
+        Tile(tileSize, 1, texmgr.getRef(tileTypeShortName(TileType::FOREST)),
+             { staticAnim }, TileType::FOREST, 100, 0, 1);
+    tileAtlas[tileTypeShortName(TileType::WATER)] =
+        Tile(tileSize, 1, texmgr.getRef(tileTypeShortName(TileType::WATER)),
              { Animation(0, 3, 0.5f), Animation(0, 3, 0.5f), Animation(0, 3, 0.5f) },
              TileType::WATER, 0, 0, 1);
-    tileAtlas["residential"] =
-        Tile(tileSize, 2, texmgr.getRef("residential"),
+    tileAtlas[tileTypeShortName(TileType::RESIDENTIAL)] =
+        Tile(tileSize, 2, texmgr.getRef(tileTypeShortName(TileType::RESIDENTIAL)),
              { staticAnim, staticAnim, staticAnim,
              staticAnim, staticAnim, staticAnim },
              TileType::RESIDENTIAL, 300, 50, 6);
-    tileAtlas["commercial"] =
-        Tile(tileSize, 2, texmgr.getRef("commercial"),
+    tileAtlas[tileTypeShortName(TileType::COMMERCIAL)] =
+        Tile(tileSize, 2, texmgr.getRef(tileTypeShortName(TileType::COMMERCIAL)),
              { staticAnim, staticAnim, staticAnim, staticAnim },
              TileType::COMMERCIAL, 300, 50, 4);
-    tileAtlas["industrial"] =
-        Tile(tileSize, 2, texmgr.getRef("industrial"),
+    tileAtlas[tileTypeShortName(TileType::INDUSTRIAL)] =
+        Tile(tileSize, 2, texmgr.getRef(tileTypeShortName(TileType::INDUSTRIAL)),
              { staticAnim, staticAnim, staticAnim, staticAnim },
              TileType::INDUSTRIAL, 300, 50, 4);
-    tileAtlas["road"] =
-        Tile(tileSize, 1, texmgr.getRef("road"),
+    tileAtlas[tileTypeShortName(TileType::ROAD)] =
+        Tile(tileSize, 1, texmgr.getRef(tileTypeShortName(TileType::ROAD)),
              { staticAnim, staticAnim, staticAnim,
              staticAnim, staticAnim, staticAnim,
              staticAnim, staticAnim, staticAnim,

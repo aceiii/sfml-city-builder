@@ -76,3 +76,16 @@ std::string tileTypeToStr(TileType type) {
         case TileType::INDUSTRIAL:      return "Industrial Zone";
     }
 }
+
+std::string tileTypeShortName(TileType type) {
+    switch (type) {
+        case TileType::VOID_TILE:       return "void";
+        case TileType::GRASS:           return "grass";
+        case TileType::FOREST:          return "forest";
+        case TileType::WATER:           return "water";
+        case TileType::ROAD:            return "road";
+        case TileType::RESIDENTIAL:     return "residential";
+        case TileType::COMMERCIAL:      return "commercial";
+        case TileType::INDUSTRIAL:      return "industrial";
+    }
+}
