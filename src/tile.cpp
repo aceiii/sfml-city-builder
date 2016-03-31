@@ -30,14 +30,14 @@ Tile::Tile(const unsigned int tileSize, const unsigned int height, sf::Texture& 
     this->animHandler.frameSize = sf::IntRect(0, 0, tileSize * 2, tileSize * height);
 
     for (auto animation : animations) {
-        animHandler.addAnim(animation);
+        animHandler.addAnimation(animation);
     }
 
     this->animHandler.update(0.0f);
 }
 
 void Tile::draw(sf::RenderWindow &window, float dt) {
-    animHandler.changeAnim(tileVariant);
+    animHandler.changeAnimation(tileVariant);
     animHandler.update(dt);
 
     sprite.setTextureRect(animHandler.bounds);

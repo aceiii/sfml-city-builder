@@ -2,60 +2,61 @@
 // Created by Borin Ouch on 2016-03-22.
 //
 
+
 #include "animation_handler.h"
 
 
 AnimationHandler::AnimationHandler() {
-    t = 0.0f;
-    currentAnim = -1;
+    _time = 0.0f;
+    _currentAnimation = -1;
 }
 
 AnimationHandler::AnimationHandler(const sf::IntRect &frameSize) {
     this->frameSize = frameSize;
 
-    t = 0.0f;
-    currentAnim = -1;
+    _time = 0.0f;
+    _currentAnimation = -1;
 }
 
 void AnimationHandler::update(const float dt) {
-    if (currentAnim >= animations.size() || currentAnim < 0) {
+    if (_currentAnimation >= _animations.size() || _currentAnimation < 0) {
         return;
     }
 
-    float duration = animations[currentAnim].duration;
+    float duration = _animations[_currentAnimation].duration;
 
-    if (int((t + dt) / duration) > int(t / duration)) {
-        int frame = int((t + dt) / duration);
+    if (int((_time + dt) / duration) > int(_time / duration)) {
+        int frame = int((_time + dt) / duration);
 
-        frame %= animations[currentAnim].getLength();
+        frame %= _animations[_currentAnimation].getLength();
 
         sf::IntRect rect = frameSize;
         rect.left = rect.width * frame;
-        rect.top = rect.height * currentAnim;
+        rect.top = rect.height * _currentAnimation;
         bounds = rect;
     }
 
-    t += dt;
+    _time += dt;
 
-    if (t > duration * animations[currentAnim].getLength()) {
-        t = 0.0f;
+    if (_time > duration * _animations[_currentAnimation].getLength()) {
+        _time = 0.0f;
     }
 }
 
-void AnimationHandler::addAnim(Animation& anim) {
-    animations.push_back(anim);
+void AnimationHandler::addAnimation(Animation &animation) {
+    _animations.push_back(animation);
 }
 
-void AnimationHandler::changeAnim(unsigned int animId) {
-    if (currentAnim == animId || animId >= animations.size() || animId < 0) {
+void AnimationHandler::changeAnimation(unsigned int animationId) {
+    if (_currentAnimation == animationId || animationId >= _animations.size() || animationId < 0) {
         return;
     }
 
-    this->currentAnim = animId;
+    this->_currentAnimation = animationId;
 
     sf::IntRect rect = frameSize;
-    rect.top = rect.height * animId;
+    rect.top = rect.height * animationId;
 
     bounds = rect;
-    t = 0.0f;
+    _time = 0.0f;
 }
